@@ -1,0 +1,6 @@
+[
+    {"course_code":1100, "course_name": "Python"},
+    {"course_code":1200, "course_name": "C++"},
+    {"course_code":1300, "course_name": "JavaScript"},
+    {"course_code":1400, "course_name": "Assembly"}
+]
