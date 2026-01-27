@@ -1,3 +1,14 @@
+import json
+from logic.domain_logic import Course, Student
+
+# Loading the courses from courses.json
+def load_courses():
+    with open("data/courses.json", "r") as file:
+        data = json.load(file)
+        
+    return [Course(c["course_code"], c["course_name"]) for c in data]
+
+AVAILABLE_COURSES = load_courses()
 class User:
     def __init__(self, role):
         self.role = role
@@ -13,7 +24,7 @@ def user():
         choice = input("Select your role: ")
 
         if choice == "1" or choice.lower() == "student":
-            return User("Student")
+            return Student("Student User")
         elif choice == "2" or choice.lower() == "admin":
             return User("Admin")
         elif choice == "3" or choice.lower() == "staff":
@@ -24,6 +35,23 @@ def user():
         else:
             print("Invalid choice!!")
             return None
+
+# adding course display + selection helpers
+
+def show_courses(courses):
+    print("\n== Available Courses ==")
+    for course in courses:
+        print(f"{course.course_code} - {course.course_name}")
+        
+def select_course(courses):
+    code = input("Enter course code to enroll: ")
+    
+    for course in courses:
+        if str(course.course_code) == code:
+            return course
+        
+    print("Invalid course code.")
+    return None
 
 
 def show_menu(user):
@@ -44,9 +72,14 @@ def show_menu(user):
             choice = input("Enter option: ")
 
             if choice == "1" or choice.lower() == "view courses":
-                pass
+                show_courses(AVAILABLE_COURSES)
             elif choice == "2" or choice.lower() == "enroll":
-                pass
+                show_courses(AVAILABLE_COURSES)
+                course = select_course(AVAILABLE_COURSES)
+                
+                # Passes the selected course object to enroll()
+                if course:
+                    user.enroll(course)
             elif choice == "3" or choice.lower() == "fees":
                 pass
             elif choice == "4" or choice.lower() == "home":
@@ -108,14 +141,14 @@ def show_menu(user):
 
 
         
+def run_system():
+    while True:
+        current_user = user()
+        if current_user is None:
+            break
 
-while True:
-    current_user = user()
-    if current_user is None:
-        break
+        if not show_menu(current_user):
+            break
 
-    if not show_menu(current_user):
-        break
-
-    print("\n...Redirecting user to login page....\n.")
+        print("\n...Redirecting user to login page....\n.")
 
