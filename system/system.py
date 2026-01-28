@@ -8,14 +8,37 @@ def load_courses():
         
     return [Course(c["course_code"], c["course_name"]) for c in data]
 
+def load_users():
+    with open("data/users.json", "r") as file:
+        return json.load(file)
+
 AVAILABLE_COURSES = load_courses()
 class User:
-    def __init__(self, role):
+    def __init__(self, username, role):
         self.role = role
+        self.username = username
 
 
 def user():
+    
+        # loading users
+        users = load_users()
+        username = input("Enter username: ")
+
         print("--Welcome to Greater Heights School--")
+        for user in users:
+            if user["username"].lower() == username.lower():
+                role = user["role"].lower()
+                
+                if role == "student":
+                    return Student(user["username"])
+                else:
+                    return User(role.capitalize())
+                
+        print("User not found.")
+        return None
+    
+'''
         print("[1] Student")
         print("[2] Admin")
         print("[3] Staff ")
@@ -36,6 +59,7 @@ def user():
             print("Invalid choice!!")
             return None
 
+'''
 # adding course display + selection helpers
 
 def show_courses(courses):
